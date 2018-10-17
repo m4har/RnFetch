@@ -1,8 +1,15 @@
 import React from 'react';
 import { Container, Content, Input, Button, Text, Footer } from 'native-base'
 import axios from 'axios'
+import { CreateList } from '../../redux/action/ListsAction';
+import {connect} from 'react-redux' 
+import { createStore } from 'redux';
 
-export default class AddTodo extends React.Component {
+class AddTodo extends React.Component {
+
+constructor(props){
+  super(props)
+}
 
   state = {
     inputan: '',
@@ -11,17 +18,19 @@ export default class AddTodo extends React.Component {
     this.setState({ inputan: text })
   }
   changeButton =() =>{
-
-    axios.post('http://35.237.4.180:5000/api/heroes/',{
+    this.props.dispatch(CreateList({
       todo: this.state.inputan
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      this.props.navigation.push('Todo')
+    }))
+    // axios.post('http://35.237.4.180:5000/api/heroes/',{
+    //   todo: this.state.inputan
+    // })
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+      this.props.navigation.pop()
     }
 
   render() {
@@ -42,3 +51,9 @@ export default class AddTodo extends React.Component {
     );
   }
 }
+
+const mapStoreToProps = state => ({
+  todo: state.Lists
+})
+
+export default connect(mapStoreToProps)(AddTodo)

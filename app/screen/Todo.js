@@ -3,31 +3,22 @@ import { Header, Container, Content, Text, List, ListItem, Icon, Input, Item, Fa
 import { ActivityIndicator, FlatList , View, ScrollView} from 'react-native'
 import axios from 'axios'
 
-export default class Todo extends React.Component {
 
-  state = {
-    list: [],
-    isLoading: true,
-  }
+//redux mengambil class
+import {connect} from 'react-redux'
+import {FetchList} from '../../redux/action/ListsAction'
+
+class Todo extends React.Component {
+
+
 
   componentDidMount() {
-    
-    axios.get(`http://35.237.4.180:5000/api/heroes/`)
-      .then(res => {
-        const list = res.data;
-        this.setState({ isLoading: false, list },
-          function () {
-
-          });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    this.props.dispatch(FetchList())
   }
 
   render() {
 
-    if (this.state.isLoading) {
+    if (this.props.todo.fetching) {
       return (
         <View style={{ flex: 1, padding: 20 }}>
           <ActivityIndicator />
@@ -55,7 +46,7 @@ export default class Todo extends React.Component {
         <Content>
           <List style={{ top: 40, height:500 }}>
           <ScrollView>
-          {this.state.list.map((list, index) => (
+          {this.props.todo.list.map((list, index) => (
             <ListItem key={index}>
             <Text>{list.todo}</Text>
           </ListItem>
@@ -76,3 +67,8 @@ export default class Todo extends React.Component {
   }
 }
 
+const mapStoreToProps = state => ({
+  todo: state.Lists
+})
+
+export default connect(mapStoreToProps)(Todo)
