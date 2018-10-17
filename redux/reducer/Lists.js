@@ -20,6 +20,15 @@ const Lists = (state = initialState, action)=> {
             return { ...state, fetching: false, fetched: true, list: [...state.list, action.payload.data] }
         case "CREATE_LIST_REJECTED":
             return { ...state, fetching: false, error: action.payload }
+
+        case "DELETE_LIST_PENDING":
+            return { ...state, fetching: true }
+        case "DELETE_LIST_FULFILLED":
+            console.log('DATA', action.payload.data)
+            const newListAfterDelete = state.list.filter(lists => lists._id != action.payload.data._id)
+            return { ...state, fetching: false, fetched: true, list: newListAfterDelete }
+        case "DELETE_LIST_REJECTED":
+            return { ...state, fetching: false, error: action.payload }
         default:
             return state
     }

@@ -1,23 +1,27 @@
 import React from 'react'
-import { Header, Container, Content, Text, List, ListItem, Icon, Input, Item, Fab, Button } from 'native-base'
-import { ActivityIndicator, FlatList , View, ScrollView} from 'react-native'
+import { View, Header, Container, Content, Text, List, ListItem, Icon, Input, Item, Fab, Button, Left, Body, Right } from 'native-base'
+import { ActivityIndicator, FlatList , ScrollView} from 'react-native'
 import axios from 'axios'
 
 
 //redux mengambil class
 import {connect} from 'react-redux'
-import {FetchList} from '../../redux/action/ListsAction'
+import {FetchList, DeleteList} from '../../redux/action/ListsAction'
 
 class Todo extends React.Component {
 
-
-
+  
   componentDidMount() {
     this.props.dispatch(FetchList())
   }
 
+  handleDelete(id){
+    this.props.dispatch(DeleteList(id))
+  }
+  
   render() {
-
+    let b = 0
+    
     if (this.props.todo.fetching) {
       return (
         <View style={{ flex: 1, padding: 20 }}>
@@ -43,18 +47,27 @@ class Todo extends React.Component {
             <Input placeholder='search' />
           </Item>
         </Header>
-        <Content>
-          <List style={{ top: 40, height:500 }}>
+        {/* <Content> */}
+          <List style={{ top: 40, height:550 }}>
           <ScrollView>
           {this.props.todo.list.map((list, index) => (
-            <ListItem key={index}>
-            <Text>{list.todo}</Text>
+            <ListItem  key={index}>
+              <Left style={{flexDirection:'row'}}>
+                  <Text>{index + 1}. </Text>
+                  <Text>{list.todo}</Text>
+              </Left>
+              
+              <Right>
+                <Button full danger onPress={()=> this.handleDelete(list._id)} backgroundColor="red">
+                  <Text>X</Text>
+                </Button>
+              </Right>
           </ListItem>
             )
             )}
           </ScrollView>
           </List>
-        </Content>
+        {/* </Content> */}
         <Fab
           onPress={() => this.props.navigation.navigate('AddTodo')}
           style={{ backgroundColor: '#2ecc71' }}

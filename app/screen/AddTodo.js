@@ -4,6 +4,7 @@ import axios from 'axios'
 import { CreateList } from '../../redux/action/ListsAction';
 import {connect} from 'react-redux' 
 import { createStore } from 'redux';
+import md5 from 'md5'
 
 class AddTodo extends React.Component {
 
@@ -30,7 +31,8 @@ constructor(props){
     //   .catch(function (error) {
     //     console.log(error);
     //   });
-      this.props.navigation.pop()
+      // this.props.navigation.pop()
+      this.input._root.clear()
     }
 
   render() {
@@ -38,9 +40,10 @@ constructor(props){
       <Container>
         <Content>
           <Input
+          ref={(ref) => { this.input = ref }}
           onChangeText={this.changeName}
           placeholder="type Todo..."/>
-          <Text>{this.state.inputan}</Text>
+          <Text>{md5(this.state.inputan)}</Text>
         </Content>
         <Footer>
           <Button onPress={this.changeButton}>

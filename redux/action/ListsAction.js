@@ -20,3 +20,14 @@ export function CreateList(value) {
         })
     }
 }
+
+export function DeleteList(id) {
+    return {
+        type: 'DELETE_LIST',
+        payload: axios({
+            method: 'DELETE',
+            url: `http://35.237.4.180:5000/api/heroes/${id}`,
+            
+        })
+    }
+}
